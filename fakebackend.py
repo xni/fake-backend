@@ -28,10 +28,13 @@ def _get_search_result(query):
                            'data.json')) as events_file:
         for line in events_file:
             event = json.loads(line)
+            is_event_ok = True
             for param, value in checks:
                 if str(event.get(param)) != value:
-                    continue
-            yield event
+                    is_event_ok = False
+                    break
+            if is_event_ok:
+                yield event
 
 
 def find(document_uuid, query):
