@@ -1,0 +1,6 @@
+title Download Events to the GRID
+User -> Web Page: Clicks "Download to the GRID" button
+Web Page -> Frontend: /download-to-grid?id=<search-task-id>
+Frontend -> Model: SearchTask.objects.get(pk=<search-task-id>).download_to_grid()
+Model -> Frontend: <URL>
+Frontend -> User: <URL>

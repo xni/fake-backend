@@ -1,0 +1,25 @@
+# http://www.websequencediagrams.com/
+
+title Search for Events
+
+User -> Web Page: Typed a <query>, Pressed "Search"
+Web Page -> Frontend: Ajax /search?q=<query>
+Frontend -> Model: SearchTask.start(<query>)
+Model -> Frontend: <search-task-id>
+Frontend -> Web Page: <search-task-id>
+loop until Ready
+Web Page -> Frontend: Ajax /search-task-status?id=<search-task-id>
+Frontend -> Model: SearchTask.objects.get(pk=<search-task-id>).status()
+alt In Progress
+Model -> Frontend: "In progress"
+Frontend -> Web Page: "In progress"
+else Ready
+Model -> Frontend: "Ready"
+Frontend -> Web Page: "Ready"
+end
+end
+Web Page -> Frontend: GET /search-resuts-page?id=<search-task-id>&limit=<limit>&offset=<offset>
+Frontend -> Model: SearchTask.objects.get(pk=<search-task-id>).events(<limit>, <offset>)
+Model -> Frontend: [events]
+Frontend -> Web Page: [events]
+Web Page -> User: [events]

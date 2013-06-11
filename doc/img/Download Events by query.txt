@@ -1,0 +1,36 @@
+title Download Events by query
+User -> Web Page: Typed a <query>, Pressed "Search"
+Web Page -> Frontend: Ajax /search?q=<query>
+Frontend -> Model: SearchTask.Start(<query>)
+Model -> Frontend: <search-task-id>
+Frontend -> Web Page: <search-task-id>
+loop until Ready
+Web Page -> Frontend: Ajax /search-task-status?id=<search-task-id>
+Frontend -> Model: SearchTask.Status(<search-task-id>)
+alt In Progress
+Model -> Frontend: "In progress"
+Frontend -> Web Page: "In progress"
+else Ready
+Model -> Frontend: "Ready"
+Frontend -> Web Page: "Ready"
+end
+end
+Web Page -> Frontend: /download?search-task-id=<search-task-id>
+Frontend -> Model: DownloadTask.start(<search-task-id>, <user-id>)
+Model -> Frontend: <download-task-id>
+Frontend -> Web Page: <download-task-id>
+loop Until Ready
+Web Page -> Frontend: /download-status?id=<download-task-id>
+Frontend -> Model: DownloadTask.status(<download-task-id>, <user-id>)
+alt In Progress
+Model -> Frontend: "In progress"
+Frontend -> Web Page: "In progress"
+else Ready
+Model -> Frontend: "Ready"
+Frontend -> Web Page: "Ready"
+end
+end
+Web Page -> Frontend: GET /download-events?id=<search-task-id>
+Frontend -> Model: DownloadTask.get_result(<download-task-id>, <user-id>)
+Model -> Frontend: Path to the archive with events
+Frontend -> User: Archive with events

@@ -1,0 +1,21 @@
+title Download Events
+User -> Web Page: Click "Download" button\non results page for <search-task-id>
+Web Page -> Frontend: /download?search-task-id=<search-task-id>
+Frontend -> Model: SearchTask.objects.get(pk=<search-task-id>).download()
+Model -> Frontend: <download-task-id>
+Frontend -> Web Page: <download-task-id>
+loop Until Ready
+Web Page -> Frontend: /download-status?id=<download-task-id>
+Frontend -> Model: DownloadTask.objects.get(pk=<download-task-id>).status()
+alt In Progress
+Model -> Frontend: "In progress"
+Frontend -> Web Page: "In progress"
+else Ready
+Model -> Frontend: "Ready"
+Frontend -> Web Page: "Ready"
+end
+end
+Web Page -> Frontend: GET /download-events?id=<search-task-id>
+Frontend -> Model: DownloadTask.objects.get(pk=<download-task-id>).get_result()
+Model -> Frontend: Path to the archive with events
+Frontend -> User: Archive with events

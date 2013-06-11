@@ -3,6 +3,7 @@ import json
 import os
 import random
 import sqlite3
+import itertools
 
 
 __author__ = 'stromsund@yandex-team.ru'
@@ -53,7 +54,7 @@ def find(document_uuid, query):
 
 
 def check_state(uuids):
-    from backendconnection import READY_STATUS, IN_PROGRESS_STATUS
+    from __init__ import READY_STATUS, IN_PROGRESS_STATUS
 
     connection = _get_connection()
     cursor = connection.cursor()
@@ -69,10 +70,14 @@ def check_state(uuids):
     connection.close()
 
 
-def get_search_result(uuid):
+def get_search_result(uuid, limit, offset):
     connection = _get_connection()
     cursor = connection.cursor()
     cursor.execute('select query from queries where document_uuid = ?',
                    (uuid, ))
     query = cursor.fetchone()[0]
-    return _get_search_result(query)
+    return itertools.islice(_get_search_result(query), offset, offset + limit)
+
+
+def download(results_uuid, search_document_uuid):
+    find(results_uuid, search_document_uuid)

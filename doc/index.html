@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Eventindex Frontend Architecture</title>
+    <style type="text/css">
+        span.classname {
+            font-family: monospace;
+            font-size: large;
+        }
+        span.methodname {
+            font-family: monospace;
+        }
+        span.fieldname {
+            font-family: monospace;
+        }
+
+        p {
+            margin-left: 2em;
+            max-width: 40em;
+            font-size: large;
+        }
+
+        div.diagramm {
+            padding: 2em;
+            background-color: moccasin;
+        }
+        div.diagramm-core {
+            text-align: center;
+        }
+        div.diagramm-label {
+            margin-top: 1.5em;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <h1>Eventindex Frontend Architecture</h1>
+    <p>Eventindex Frontend is based upon interaction with two classes: <span class="classname">SearchTask</span>
+    and <span class="classname">DownloadTask</span>.</p>
+
+    <p>Typical user's stories and its solutions are described later in this document.</p>
+
+    <h2>Search</h2>
+    <div class="diagramm">
+        <div class="diagramm-core">
+            <img src="./img/Search for Events.png" />
+        </div>
+        <div class="diagramm-label">
+            Diag. 1. Sequence diagram for a search process.
+        </div>
+    </div>
+
+    <h2>Query History</h2>
+    <p>The recommended way to get query history for a particular user is
+    <span class="methodname">SearchTask.queries_by(user_id)</span>, which returns a
+    <a href="https://docs.djangoproject.com/en/1.5/ref/models/querysets/#django.db.models.QuerySet">QuerySet</a>.
+    </p>
+
+    <p>For every SearchTask object returned, it is possible determine if results are ready by
+    <span class="methodname">SearchTask.is_ready()</span> call. It also may be useful to manipulate
+    <span class="fieldname">SearchTask.is_favourite</span> column.</p>
+
+    <h2>Download Events</h2>
+    <h3>Via a client's web-browser</h3>
+    <div class="diagramm">
+        <div class="diagramm-core">
+            <img src="./img/Download Events.png" />
+        </div>
+        <div class="diagramm-label">
+            Diag. 2. Sequence diagram for a download process.
+        </div>
+    </div>
+
+    <h3>To GRID</h3>
+    <div class="diagramm">
+        <div class="diagramm-core">
+            <img src="./img/Download Events to the GRID.png" />
+        </div>
+        <div class="diagramm-label">
+            Diag. 3. Sequence diagram for a download to GRID process.
+        </div>
+    </div>
+
+    <h3>Manually</h3>
+    <div class="diagramm">
+        <div class="diagramm-core">
+            <img src="./img/Get%20Events%20Downloader%20script.png" />
+        </div>
+        <div class="diagramm-label">
+            Diag. 4. Sequence diagram for a manual download process.
+        </div>
+    </div>
+
+    <h2>Mixed tasks</h2>
+    <p>User is allowed to make mixed queries, eg.: "Download events via my web-browser, that match a [query]".</p>
+    <p>This kind of queries may be completed by combining previously described use cases. For the example we gave
+    in the pervious line, sequence diagram may look like this:</p>
+    <div class="diagramm">
+        <div class="diagramm-core">
+            <img src="./img/Download%20Events%20by%20query.png" />
+        </div>
+        <div class="diagramm-label">
+            Diag. 5. Sequence diagram for a mixed process.
+        </div>
+    </div>
+
+</body>
+</html>

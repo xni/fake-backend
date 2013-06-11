@@ -1,0 +1,6 @@
+title Get Events Downloader script
+User -> Web Page: Clicks "Generate Downloader Script" button
+Web Page -> Frontend: /get-downloader-script?id=<search-task-id>
+Frontend -> Model: SearchTask.objects.get(pk=<search-task-id>).get_downloader_script()
+Model -> Frontend: <code: String>
+Frontend -> User: <code: String>
