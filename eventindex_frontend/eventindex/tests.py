@@ -1,4 +1,6 @@
+import os
 import time
+from django.core.exceptions import ObjectDoesNotExist
 
 from django.test import TestCase
 
@@ -49,3 +51,24 @@ class ModelsTest(TestCase):
         history = models.SearchTask.queries_by(1).order_by('query').all()
         download_task_id = history[0].download()
         self.assertTrue(str(download_task_id).isdigit(), download_task_id)
+        result = None
+        while result != backend.READY_STATUS:
+            result = \
+                models.DownloadTask.objects.get(pk=download_task_id).status()
+        result_path = models.DownloadTask.objects.get(pk=download_task_id)\
+            .get_result()
+        self.assertTrue(os.path.exists(result_path))
+        os.remove(result_path)
+        url = history[0].download_to_grid()
+        self.assertTrue(len(url) > 0)
+        code = history[0].get_downloader_script()
+        self.assertTrue(len(code) > 0)
+
+    def test_download_resume(self):
+        self.test_search()
+        history = models.SearchTask.queries_by(1).order_by('query').all()
+        search_task = history[0]
+        self.assertRaises(ObjectDoesNotExist,
+                          getattr, search_task, 'downloadtask')
+        download_task_id = search_task.download()
+        self.assertEqual(download_task_id, search_task.download())

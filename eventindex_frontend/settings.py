@@ -152,3 +152,6 @@ LOGGING = {
         },
     }
 }
+
+# Path where downloaded events are stored before returned to user.
+EVENT_DOWNLOAD_CACHE_PATH = '/tmp'

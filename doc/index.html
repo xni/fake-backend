@@ -70,6 +70,9 @@
             Diag. 2. Sequence diagram for a download process.
         </div>
     </div>
+    <p>Note: <span class="methodname">DownloadTask.status()</span> may return
+    <span class="methodname">backendconnection.DOWNLOAD_RESULT_IS_EXPIRED_STATUS</span>. It happens
+    then download results were thrown out of the cache. So search task results are to be redownloaded.</p>
 
     <h3>To GRID</h3>
     <div class="diagramm">
